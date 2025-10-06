@@ -13,12 +13,24 @@ export class ApplicationsService {
       taskId: new Types.ObjectId(taskId),
       userId: new Types.ObjectId(userId),
     });
+
     if (already) {
       throw new ConflictException('You have already applied to this task');
     }
-    const created = new this.appModel({ taskId: new Types.ObjectId(taskId), userId: new Types.ObjectId(userId), message: dto.message, appliedAt: new Date() });
+
+    const created = new this.appModel({
+      taskId: new Types.ObjectId(taskId),
+      userId: new Types.ObjectId(userId),
+      applicantName: dto.applicantName,
+      course: dto.course,
+      status: dto.status || 'Pending',
+      message: dto.message,
+      appliedAt: new Date(),
+    });
+
     return created.save();
   }
+
 
   async findByTask(taskId: string) {
     return this.appModel

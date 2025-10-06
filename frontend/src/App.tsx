@@ -8,6 +8,7 @@ import TaskDetails from './pages/TaskDetails';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import TaskList from './pages/TaskList';
 import CreateTask from './pages/CreateTask';
+import TaskApplications from './pages/TaskApplications';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/tasks/:id" element={<ProtectedRoute><TaskDetails /></ProtectedRoute>} />
           <Route path="/tasks" element={<ProtectedRoute><TaskList /></ProtectedRoute>} />
           <Route path="/tasks/new" element={<ProtectedRoute role="contributor"><CreateTask /></ProtectedRoute>} />
+          <Route path="/tasks/:id/applications" element={<TaskApplications />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>

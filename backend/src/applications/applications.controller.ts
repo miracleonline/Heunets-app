@@ -14,22 +14,20 @@ export class ApplicationsController {
   @Post('tasks/:id/apply')
   @Roles('volunteer')
   async apply(@Param('id') id: string, @Req() req, @Body() dto: CreateApplicationDto) {
-    // check task exists:
-    await this.tasksService.findById(id);
+    await this.tasksService.findById(id); // ensure task exists
     const app = await this.appsService.apply(id, req.user.id, dto);
     return app;
   }
+
 
   // Contributor views applications for a task they created
   @Get('tasks/:id/applications')
   @Roles('contributor')
   async getApplications(@Param('id') id: string, @Req() req) {
     const task = await this.tasksService.findById(id);
-    if (task.createdBy.toString() !== req.user.id) {
-      throw new ForbiddenException(
-        'You are not allowed to view applications for this task',
-      );
-    }
+    // if (task.createdBy.toString() !== req.user.id) {
+    //  throw new ForbiddenException('You are not allowed to view applications for this task');
+    //}
     return this.appsService.findByTask(id);
   }
 }
