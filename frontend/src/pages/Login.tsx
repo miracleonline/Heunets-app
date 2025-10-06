@@ -6,12 +6,22 @@ export default function Login() {
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');  
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(email, password);
-    navigate('/dashboard');
+    setError('');  
+    try {
+      await login( email, password );
+      navigate('/dashboard');
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(Array.isArray(err.response.data.message) ? err.response.data.message.join(', ') : err.response.data.message);
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
+    }
   };
 
   return (
@@ -22,6 +32,7 @@ export default function Login() {
         <input placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
         <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Show error here */}
       <p>No account? <Link to="/register">Register</Link></p>
     </div>
   );
